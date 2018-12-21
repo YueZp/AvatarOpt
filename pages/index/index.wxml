@@ -1,0 +1,53 @@
+<!--index.wxml-->
+<view class='header'>
+  <view class='tab-slider-container'>
+    <view class="tab-slider--tabs {{isSquare?'':'slide'}}">
+      <view class="tab-slider--trigger {{isSquare?'active':''}}" bindtap='squareClick'> 方形</view>
+      <view class="tab-slider--trigger  {{isSquare?'':'active'}}" bindtap='roundClick'> 圆形</view>
+    </view>
+  </view>
+  <view class="tipsContainer" hidden="{{picChoosed}}">
+    <view class='tipsContent'>
+      <text class='tipsTitle'>欢迎使用</text>
+      <text>　　您可以点击下方【打开相册】,【微信头像】来挑选您的图片来美化.</text>
+      <text>　　【微信头像】选项需要获取您的公开信息，需要您的授权，但您放心，这很安全，我并不会保存您的信息。</text>
+      <text>　　如果您使用的开心的话，欢迎分享给小伙伴，一起换个头像吧!</text>
+    </view>
+  </view>
+  <view class="imageContainer" hidden="{{!picChoosed}}">
+    <canvas canvas-id="canvasIn" class="bg" mode='aspectFit' src="{{bgPic.src}}">
+      <view class="typeContainer" id="typeContainer" bind:touchstart="touchStart" bind:touchend="touchEnd" bind:touchmove="touchMove" wx:for="{{typeIcons}}" wx:key="index" data-index="{{index}}">
+        <icon type="cancel" class="cancel" id="cancel" style="top:{{item.cancelCenterY+'px'}};left:{{item.cancelCenterX+'px'}}" data-index="{{index}}" hidden='{{currentIcon === index?false:true}}'></icon>
+        <icon type="waiting" class="handle" id="handle" color="green" style="top:{{item.handleCenterY+'px'}};left:{{item.handleCenterX+'px'}}" data-index="{{index}}" hidden='{{currentIcon === index?false:true}}'></icon>
+        <image class="hat {{currentIcon === index?'active':''}}" id='hat' src="{{item.src}}" style="top:{{item.hatCenterY-hatSize/2+'px'}};left:{{item.hatCenterX-hatSize/2+'px'}};transform:rotate({{item.rotate+'deg'}}) scale({{item.scale}})" data-index="{{index}}"></image>
+      </view>
+    </canvas>
+  </view>
+  <view class='btnContainer'>
+    <button bindtap='openPhoto'>打开相册</button>
+    <button bindtap='openWXPhoto'>微信头像</button>
+    <button bindtap='openPreview'>预览</button>
+  </view>
+
+</view>
+<view class="tabContainer">
+  <scroll-view scroll-x="true">
+    <view class="item-content" wx:for="{{tabs}}" wx:key="item" data-index="{{index}}" wx:for-item="item" bindtap='tabClick'>
+      <view class='tab-con'>
+        <view class="tab {{currentTab === index?'selected':'' }}">{{item}}</view>
+        <view class='line' hidden="{{currentTab === index?false:true}}"></view>
+      </view>
+    </view>
+  </scroll-view>
+</view>
+
+<view class='divLine'></view>
+<view class="iconContainer">
+  <scroll-view scroll-x="true">
+    <view class="icon-content" wx:for="{{imageDatas[currentTab]}}" wx:key="item" data-index="{{index}}" wx:for-item="item" bindtap='iconClick'>
+      <view class='icon-con'>
+        <image class='icon-item' mode='aspectFit' src='{{item}}' lazy-load="true"></image>
+      </view>
+    </view>
+  </scroll-view>
+</view>
